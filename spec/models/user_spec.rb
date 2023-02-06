@@ -29,11 +29,11 @@ RSpec.describe User, type: :model do
 
   describe "#valid?" do
     it "is valid when email is unique" do
-      create_a_user
+      user1 = create_a_user
+      user2 = create_a_user
 
-      user = User.new
-      user.email = "adam@example.org"
-      expect(user.valid?).to be true
+      expect(user2.email).not_to be user1.email
+      expect(user2).to be_valid
     end
 
     it "is invalid if the email is taken" do
@@ -43,23 +43,24 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
     end
 
-    ## this test won't work
-    # it "is invalid if the username is taken" do
-    #   user = create(:user)
-    #   another_user = create(:user)
-
-    #   expect(another_user).to be_valid
-    #   another_user.username = user.username
-    #   expect(another_user).not_to be_valid
-    # end
     it "is invalid if the username is taken" do
-      user = User.new
-      another_user = User.new
+      user1 = create_a_user
+      user2 = create_a_user
+      expect(user1).to be_valid
 
-      expect(another_user).to be_valid
-      user.username = "ryan"
-      another_user.username = "ryan"
-      expect(another_user).not_to be_valid
+      user2.username = user1.username
+      expect(user2).not_to be_valid
+    end
+
+    it "is invalid if user's first name is blank" do
+      user = create_a_user
+      expect(user).to be_valid
+
+      user.first_name = ""
+      expect(user).not_to be_valid
+
+      user.first_name = nil
+      expect(user).not_to be_valid
     end
 
   end
