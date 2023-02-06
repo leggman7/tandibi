@@ -60,7 +60,7 @@ group :development, :test do
   
 
   gem 'rspec-rails', '~> 6.0.1'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '~>6.2.0'
   gem 'annotate', '~> 3'
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]

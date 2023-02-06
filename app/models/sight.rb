@@ -25,4 +25,5 @@ class Sight < ApplicationRecord
   ].freeze
 
   validates :activity_type, inclusion: { in: ACTIVITY_TYPES}
+  validates :activity_type, presence: true
 end
