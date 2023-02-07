@@ -63,6 +63,67 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
     end
 
+    it "is invalid if the email looks bogus" do
+      user = create_a_user
+      expect(user).to be_valid
+
+      user.email = ""
+      expect(user).to be_invalid
+
+      user.email = "foo.bar"
+      expect(user).to be_invalid
+
+      user.email = "foo@example.com"
+      expect(user).to be_valid
+    end
+
+    describe "#followings" do
+      it "can list all of the user's followings" do
+        user = create_a_user
+        friend1 = create_a_user
+        friend2 = create_a_user
+        friend3 = create_a_user
+      
+        Bond.create user: user,
+          friend: friend1,
+          state: Bond::FOLLOWING
+        Bond.create user: user,
+          friend: friend2,
+          state: Bond::FOLLOWING
+        Bond.create user: user,
+          friend: friend3,
+          state: Bond::REQUESTING
+
+        expect(user.followings).to include(friend1, friend2)
+        expect(user.follow_requests).to include(friend3)
+      end
+    end
+
+    describe "#followers" do
+      it "can list all of the user's folowers" do
+        user1 = create_a_user
+        user2 = create_a_user
+        fol1 = create_a_user
+        fol2 = create_a_user
+        fol3 = create_a_user
+        fol4 = create_a_user
+
+        Bond.create user: fol1,
+          friend: user1
+          state: Bond::FOLLOWING
+        Bond.create user: fol2,
+          friend: user1,
+          state: Bond::FOLLOWING
+        Bond.create user: fol3,
+          friend: user2,
+          state: Bond::FOLLOWING
+        Bond.create user: fol4,
+          friend: user2,
+          state: Bond::REQUESTING
+        expect(user1.followers).to eq([fol1, fol2])
+        expect(user2.followers).to eq([fol3])
+      end
+    end
   end
 
 end

@@ -18,7 +18,32 @@
 #
 class User < ApplicationRecord
   validates :email, uniqueness: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  
   validates :username, uniqueness: true
   validates :username, presence: true
   validates :first_name, presence: true
+
+  has_many :posts
+  has_many :bonds
+  has_many :followings, 
+    -> { where("bonds.state = ?", Bond::FOLLOWING) },
+    through: :bonds,
+    source: :friend
+
+  has_many :follow_requests,
+    -> { where("bonds.state = ?", Bond::REQUESTING) },
+    through: :bonds,
+    source: :friend
+  # has_many :friends, through: :bonds #this would also work but wouldn't seperate friend requests from following
+
+  has_many :followers,
+    -> { where("bonds.state = ?", Bond::FOLLOWING) },
+    through: :inward_bonds,
+    source: :user
+
+  has_many :inward_bonds,
+    class_name: "Bond",
+    foreign_key: :friend_id
+
 end

@@ -10,7 +10,7 @@ class CreateBonds < ActiveRecord::Migration[7.0]
 
     add_index :bonds, [:user_id, :friend_id], unique: true
 
-    add_foreign_key :bonds, :users, colum: :user_id
-    #add_foreign_key :bonds, :users, colum: :friend_id $crashed the program
+    add_foreign_key :bonds, :users, column: :user_id
+    add_foreign_key :bonds, :users, column: :friend_id
   end
 end

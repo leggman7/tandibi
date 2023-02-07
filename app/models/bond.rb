@@ -15,6 +15,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (friend_id => users.id)
 #  fk_rails_...  (user_id => users.id)
 #
 class Bond < ApplicationRecord
@@ -23,6 +24,9 @@ class Bond < ApplicationRecord
     FOLLOWING = "following",
     BLOCKING = "blocking",
   ].freeze
+
+  belongs_to :user
+  belongs_to :friend, class_name: "User"
 
   validates :state, presence: true
   validates :state, inclusion: { in: STATES }

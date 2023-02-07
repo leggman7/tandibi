@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_04_021710) do
   end
 
   add_foreign_key "bonds", "users"
+  add_foreign_key "bonds", "users", column: "friend_id"
   add_foreign_key "pictures", "posts"
   add_foreign_key "posts", "posts", column: "thread_id"
   add_foreign_key "posts", "users"
